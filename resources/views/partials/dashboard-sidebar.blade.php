@@ -20,7 +20,7 @@
             <i class="fas fa-bed"></i> Gérer les chambres
         </a>
         @can('view-bookings')
-        <a href="{{ route('admin.bookings.index') }}" class="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-800 transition {{ request()->routeIs('admin.bookings.*') ? 'bg-blue-800' : '' }}">
+        <a href="{{ route('dashboard.reservations') }}" class="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-800 transition {{ request()->routeIs('dashboard.reservations') ? 'bg-blue-800' : '' }}">
             <i class="fas fa-calendar-alt"></i> Gestion des réservations
         </a>
         @endcan

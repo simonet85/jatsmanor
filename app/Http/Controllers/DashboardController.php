@@ -33,7 +33,18 @@ class DashboardController extends Controller
                                     ->limit(5)
                                     ->get();
 
-            return view('dashboard.index', compact('stats', 'recentBookings'));
+            // Données pour les notifications (mock data pour éviter les erreurs)
+            $notifications = [
+                'contact_messages' => [
+                    'pending' => 0,
+                    'today' => 0,
+                    'this_week' => 0,
+                    'urgent' => 0,
+                ],
+                'last_updated' => now()->format('H:i')
+            ];
+
+            return view('dashboard.index', compact('stats', 'recentBookings', 'notifications'));
         } else {
             // Pour les clients, rediriger vers leurs réservations
             return redirect()->route('client.bookings.index');

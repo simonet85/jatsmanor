@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('dashboard.layout')
 
 @section('title', 'Tableau de Bord')
 @section('subtitle', 'Vue d\'ensemble de votre plateforme')
