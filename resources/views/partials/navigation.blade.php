@@ -77,18 +77,18 @@
         
         <!-- Sélecteur de langue mobile -->
         <div class="mt-4 pt-4 border-t border-gray-200">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                 <span class="text-sm font-medium text-gray-700">{{ trans('messages.nav.language') }}</span>
-                <div class="flex space-x-2">
+                <div class="flex space-x-1 sm:space-x-2">
                     <button onclick="switchLanguage('fr')" 
-                            class="flex items-center px-3 py-2 rounded-md text-sm {{ app()->getLocale() === 'fr' ? 'bg-blue-100 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-100' }}">
-                        <span class="text-lg mr-2">🇫🇷</span>
-                        <span>FR</span>
+                            class="flex items-center px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm {{ app()->getLocale() === 'fr' ? 'bg-blue-100 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-100' }} min-h-[44px] flex-1 sm:flex-initial justify-center">
+                        <span class="text-base sm:text-lg mr-1 sm:mr-2">🇫🇷</span>
+                        <span class="font-medium">FR</span>
                     </button>
                     <button onclick="switchLanguage('en')" 
-                            class="flex items-center px-3 py-2 rounded-md text-sm {{ app()->getLocale() === 'en' ? 'bg-blue-100 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-100' }}">
-                        <span class="text-lg mr-2">🇬🇧</span>
-                        <span>EN</span>
+                            class="flex items-center px-2 sm:px-3 py-2 rounded-md text-xs sm:text-sm {{ app()->getLocale() === 'en' ? 'bg-blue-100 text-blue-600 font-medium' : 'text-gray-600 hover:bg-gray-100' }} min-h-[44px] flex-1 sm:flex-initial justify-center">
+                        <span class="text-base sm:text-lg mr-1 sm:mr-2">🇬🇧</span>
+                        <span class="font-medium">EN</span>
                     </button>
                 </div>
             </div>

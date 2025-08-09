@@ -30,7 +30,7 @@
                 {{ trans('messages.errors.500.what_happened') }}
             </h3>
             
-            <div class="text-left space-y-3 text-gray-600">
+            <div class="grid grid-cols-1 sm:grid-cols-1 gap-3 text-left text-gray-600">
                 <p class="flex items-start">
                     <i class="fas fa-circle text-red-400 text-xs mt-2 mr-3"></i>
                     {{ trans('messages.errors.500.reason_1') }}

@@ -30,7 +30,7 @@
                 {{ trans('messages.errors.403.why_blocked') }}
             </h3>
             
-            <div class="text-left space-y-3 text-gray-600">
+            <div class="grid grid-cols-1 sm:grid-cols-1 gap-3 text-left text-gray-600">
                 <p class="flex items-start">
                     <i class="fas fa-user-slash text-yellow-400 text-sm mt-1 mr-3"></i>
                     {{ trans('messages.errors.403.reason_1') }}

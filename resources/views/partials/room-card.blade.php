@@ -1,4 +1,4 @@
-<div class="bg-white shadow rounded overflow-hidden">
+<div class="bg-white shadow rounded overflow-hidden hover:shadow-lg transition-shadow duration-200">
     @if(isset($room->image) && $room->image)
         <!-- Résidence avec image principale -->
     <img src="{{ asset($room->image) }}?v={{ time() }}" 
@@ -25,7 +25,7 @@
             <i class="fas fa-home text-4xl text-blue-400"></i>
         </div>
     @endif
-    <div class="p-4">
+    <div class="p-4 sm:p-6">
         <h3 class="text-lg font-bold mb-1">
             @if(app()->getLocale() === 'en' && !empty($room->name_en))
                 {{ $room->name_en }}
@@ -57,11 +57,11 @@
         </p>
         
         @if($room->is_active ?? $room->disponible ?? true)
-            <a href="{{ route('residence.details', $room->slug ?? $room->id) }}" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm">
+            <a href="{{ route('residence.details', $room->slug ?? $room->id) }}" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm inline-block w-full sm:w-auto text-center transition-colors duration-200">
                 {{ trans('messages.home.view_details') }}
             </a>
         @else
-            <span class="bg-gray-400 text-white px-4 py-2 rounded text-sm cursor-not-allowed">
+            <span class="bg-gray-400 text-white px-4 py-2 rounded text-sm cursor-not-allowed inline-block w-full sm:w-auto text-center">
                 {{ trans('messages.home.not_available') }}
             </span>
         @endif

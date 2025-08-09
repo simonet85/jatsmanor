@@ -1,5 +1,5 @@
 <!-- Registration Form -->
-<div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+<div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 w-full max-w-md mx-4 sm:mx-0">
     <h2 class="text-2xl font-bold text-blue-800 mb-6 text-center">
         {{ $title ?? trans('messages.auth.register_title') }}
     </h2>
@@ -20,10 +20,11 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('register') }}">
+    <form method="POST" action="{{ route('register') }}" class="space-y-4 sm:space-y-6">
         @csrf
         
-        <div class="mb-4">
+        <div class="grid grid-cols-1 gap-4 sm:gap-6">
+        <div>
             <label class="block font-semibold mb-2" for="name">{{ trans('messages.auth.full_name') }}</label>
             <input
                 type="text"
@@ -40,7 +41,7 @@
             @enderror
         </div>
         
-        <div class="mb-4">
+        <div>
             <label class="block font-semibold mb-2" for="email">{{ trans('messages.auth.email') }}</label>
             <input
                 type="email"
@@ -56,7 +57,7 @@
             @enderror
         </div>
         
-        <div class="mb-4">
+        <div>
             <label class="block font-semibold mb-2" for="password">{{ trans('messages.auth.password') }}</label>
             <input
                 type="password"
@@ -72,7 +73,7 @@
             <p class="text-xs text-gray-500 mt-1">{{ trans('messages.auth.password_min') }}</p>
         </div>
         
-        <div class="mb-4">
+        <div>
             <label class="block font-semibold mb-2" for="password_confirmation">{{ trans('messages.auth.confirm_password') }}</label>
             <input
                 type="password"
@@ -86,8 +87,9 @@
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
         </div>
+        </div>
         
-        <div class="mb-4">
+        <div>
             <label class="inline-flex items-center">
                 <input
                     type="checkbox"

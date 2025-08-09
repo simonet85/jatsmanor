@@ -105,6 +105,7 @@ return [
     'my_bookings' => 'Mes réservations',
     'dashboard' => 'Tableau de bord',
     'logout' => 'Déconnexion',
+    'language' => 'Langue',
     ],
     'footer' => [
         'description' => 'Résidences meublées à Abidjan – confort, sécurité et flexibilité à portée de clic.',

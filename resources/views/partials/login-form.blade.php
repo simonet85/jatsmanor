@@ -1,5 +1,5 @@
 <!-- Login Form -->
-<div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+<div class="bg-white rounded-xl shadow-lg p-6 sm:p-8 w-full max-w-md mx-4 sm:mx-0">
     <h2 class="text-2xl font-bold text-blue-800 mb-6 text-center">
         {{ $title ?? trans('messages.auth.login_title') }}
     </h2>
@@ -55,7 +55,7 @@
             @enderror
         </div>
         
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-2 sm:space-y-0">
             <label class="inline-flex items-center">
                 <input
                     type="checkbox"

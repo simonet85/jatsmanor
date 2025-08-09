@@ -30,7 +30,7 @@
                 {{ trans('messages.errors.404.suggestions.title') }}
             </h3>
             
-            <div class="grid grid-cols-1 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3">
                 <!-- Home Link -->
                 <a href="{{ route('home') }}" 
                    class="flex items-center p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 group">
