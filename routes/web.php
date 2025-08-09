@@ -217,3 +217,18 @@ Route::get('/test-dates', function() {
         ] : 'No booking found'
     ];
 });
+
+// Routes de test pour les pages d'erreur (développement uniquement)
+if (app()->environment('local')) {
+    Route::get('/test-404', function() {
+        abort(404);
+    });
+    
+    Route::get('/test-403', function() {
+        abort(403);
+    });
+    
+    Route::get('/test-500', function() {
+        abort(500);
+    });
+}
