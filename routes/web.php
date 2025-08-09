@@ -47,7 +47,7 @@ Route::middleware('localization')->group(function () {
     Route::get('/residences/search', [ResidenceSearchController::class, 'search'])->name('residences.search');
     Route::get('/residence/{residence}', [ResidenceController::class, 'show'])->name('residence.details');
     Route::get('/residence-details/{residence?}', [ResidenceController::class, 'details'])->name('residence.details.page');
-    Route::get('/galerie', [GalleryController::class, 'index'])->name('galerie');
+    Route::get('/galerie', [HomeController::class, 'galerie'])->name('galerie');
     Route::get('/galerie/{residence}', [GalleryController::class, 'show'])->name('galerie.show');
     Route::get('/services', [HomeController::class, 'services'])->name('services');
 
@@ -84,8 +84,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/booking/{booking}/generate-invoice', [BookingController::class, 'generateInvoice'])->name('booking.generate-invoice');
 });
 
-// Route du dashboard principal
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+// Test translations interface
+Route::get('/test-translations', function () {
+    return view('dashboard.test-translations');
+})->name('test-translations');
 
 // Routes utilisateur authentifié
 Route::middleware('auth')->group(function () {
@@ -97,6 +105,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard/chambres', [DashboardController::class, 'chambres'])->name('dashboard.chambres')->middleware('role:Administrator');
     Route::get('/dashboard/reservations', [DashboardController::class, 'reservations'])->name('dashboard.reservations')->middleware('role:Administrator');
     Route::get('/dashboard/utilisateurs', [DashboardController::class, 'utilisateurs'])->name('dashboard.utilisateurs')->middleware('role:Administrator');
+    Route::get('/dashboard/amenities', [DashboardController::class, 'amenities'])->name('dashboard.amenities')->middleware('role:Administrator');
     Route::get('/dashboard/parametres', [DashboardController::class, 'parametres'])->name('dashboard.parametres')->middleware('role:Administrator');
     
     // Routes pour les paramètres (Administrateurs seulement)
@@ -105,6 +114,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/general', [App\Http\Controllers\Admin\SettingController::class, 'updateGeneral'])->name('update-general');
         Route::post('/contact', [App\Http\Controllers\Admin\SettingController::class, 'updateContact'])->name('update-contact');
         Route::post('/booking', [App\Http\Controllers\Admin\SettingController::class, 'updateBooking'])->name('update-booking');
+        Route::post('/language', [App\Http\Controllers\Admin\SettingController::class, 'updateLanguage'])->name('update-language');
         Route::post('/frontend', [App\Http\Controllers\Admin\SettingController::class, 'updateFrontend'])->name('update-frontend');
     });
     Route::get('/dashboard/mon-compte', [App\Http\Controllers\ProfileController::class, 'show'])->name('dashboard.mon-compte');
@@ -126,6 +136,15 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{residence}/images/{image}', [App\Http\Controllers\Admin\ResidenceManagementController::class, 'deleteImage'])->name('images.delete');
         Route::patch('/{residence}/images/{image}/primary', [App\Http\Controllers\Admin\ResidenceManagementController::class, 'setPrimaryImage'])->name('images.set-primary');
         Route::patch('/{residence}/images/reorder', [App\Http\Controllers\Admin\ResidenceManagementController::class, 'reorderImages'])->name('images.reorder');
+    });
+
+    // Routes CRUD pour la gestion des équipements (Administrateurs seulement)
+    Route::prefix('admin/amenities')->name('admin.amenities.')->middleware('role:Administrator')->group(function () {
+        Route::get('/', [App\Http\Controllers\Admin\AmenityController::class, 'index'])->name('index');
+        Route::get('/ajax', [App\Http\Controllers\Admin\AmenityController::class, 'ajaxIndex'])->name('ajax.index');
+        Route::post('/', [App\Http\Controllers\Admin\AmenityController::class, 'store'])->name('store');
+        Route::put('/{amenity}', [App\Http\Controllers\Admin\AmenityController::class, 'update'])->name('update');
+        Route::delete('/{amenity}', [App\Http\Controllers\Admin\AmenityController::class, 'destroy'])->name('destroy');
     });
 
     // Routes CRUD pour la gestion des réservations (Administrateurs seulement)

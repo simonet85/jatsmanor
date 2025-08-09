@@ -40,8 +40,8 @@
         <!-- Actions à droite : Sélecteur de langue + Bouton Réserver -->
         <div class="hidden md:flex items-center space-x-3">
             <!-- Sélecteur de langue -->
-            @include('partials.language-selector')
-            
+           @include('partials.language-selector') 
+
             <!-- Bouton Réserver -->
             <a href="{{ route('residences') }}" class="bg-yellow-500 hover:bg-yellow-600 text-sm text-white font-semibold px-4 py-2 rounded transition-colors duration-200">
                 {{ trans('messages.nav.book_now') }}

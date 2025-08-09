@@ -8,12 +8,12 @@
     <section class="relative bg-gradient-to-r from-blue-800 to-blue-600 text-white py-20">
         <div class="absolute inset-0 bg-black opacity-20"></div>
         <div class="relative max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ $pageTitle }}</h1>
-            <p class="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">{{ $subtitle }}</p>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">{{ trans('messages.gallery.title') }}</h1>
+            <p class="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto">{{ trans('messages.gallery.subtitle') }}</p>
             <div class="mt-8">
                 <div class="inline-flex items-center px-6 py-3 bg-white bg-opacity-20 rounded-full">
                     <i class="fas fa-camera mr-3 text-2xl"></i>
-                    <span class="text-lg">{{ $galleryItems->count() }} photos disponibles</span>
+                    <span class="text-lg">{{ trans_choice('messages.gallery.photos_available', $galleryItems->count(), ['count' => $galleryItems->count()]) }}</span>
                 </div>
             </div>
         </div>
@@ -27,13 +27,13 @@
                 <button class="filter-btn {{ !$selectedCategory || $selectedCategory === 'all' ? 'active' : '' }}" 
                         data-filter="all">
                     <i class="fas fa-th-large mr-2"></i>
-                    Tout voir
+                    {{ trans('messages.gallery.view_all') }}
                 </button>
                 @foreach($categories as $category)
                 <button class="filter-btn {{ $selectedCategory === strtolower($category) ? 'active' : '' }}" 
                         data-filter="{{ strtolower($category) }}">
                     <i class="fas fa-building mr-2"></i>
-                    {{ ucfirst($category) }}
+                    {{ trans('messages.gallery.category_' . strtolower($category)) }}
                 </button>
                 @endforeach
             </div>
@@ -54,8 +54,11 @@
                                     <img 
                                         src="{{ str_starts_with($item['image_path'], 'storage/') ? asset($item['image_path']) : asset('storage/' . $item['image_path']) }}"
                                         alt="{{ $item['title'] }}"
-                                        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500 cursor-pointer"
-                                        onclick="openModal('{{ str_starts_with($item['image_path'], 'storage/') ? asset($item['image_path']) : asset('storage/' . $item['image_path']) }}', '{{ $item['title'] }}', '{{ $item['description'] }}', '{{ $item['category'] ?? '' }}')"
+                                        class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500 cursor-pointer gallery-image"
+                                        data-src="{{ str_starts_with($item['image_path'], 'storage/') ? asset($item['image_path']) : asset('storage/' . $item['image_path']) }}"
+                                        data-title="{{ $item['title'] }}"
+                                        data-description="{{ $item['description'] }}"
+                                        data-category="{{ $item['category'] ?? '' }}"
                                         loading="lazy"
                                         onerror="this.src='{{ asset('images/placeholder.jpg') }}'; this.onerror=null;"
                                     />
@@ -83,7 +86,7 @@
                                     <div class="absolute top-3 right-3">
                                         <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-500 text-white shadow-lg">
                                             <i class="fas fa-star mr-1"></i>
-                                            Principal
+                                            {{ trans('messages.gallery.primary') }}
                                         </span>
                                     </div>
                                     @endif
@@ -104,7 +107,7 @@
                 <div class="text-center mt-12">
                     <button id="loadMoreBtn" class="hidden bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-semibold transition-colors duration-300 shadow-lg">
                         <i class="fas fa-plus mr-2"></i>
-                        Charger plus d'images
+                        {{ trans('messages.gallery.load_more') }}
                     </button>
                 </div>
             @else
@@ -112,8 +115,8 @@
                     <div class="text-gray-400 mb-4">
                         <i class="fas fa-images text-6xl"></i>
                     </div>
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">Aucune image disponible</h3>
-                    <p class="text-gray-500">Les images de la galerie seront bientôt disponibles.</p>
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">{{ trans('messages.gallery.no_images') }}</h3>
+                    <p class="text-gray-500">{{ trans('messages.gallery.coming_soon') }}</p>
                 </div>
             @endif
         </div>
@@ -187,7 +190,22 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM chargé, initialisation de la galerie...');
     initializeGallery();
     initializeFilters();
+    initializeGalleryImageListeners();
 });
+
+// Add event listeners for gallery images
+function initializeGalleryImageListeners() {
+    const galleryImages = document.querySelectorAll('.gallery-image');
+    galleryImages.forEach(image => {
+        image.addEventListener('click', function() {
+            const src = this.getAttribute('data-src');
+            const title = this.getAttribute('data-title');
+            const description = this.getAttribute('data-description');
+            const category = this.getAttribute('data-category');
+            openModal(src, title, description, category);
+        });
+    });
+}
 
 function initializeGallery() {
     galleryItems = document.querySelectorAll('.gallery-item');

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Connexion - Jatsmanor')
+@section('title', trans('messages.auth.login_title') . ' - Jatsmanor')
 
 @section('styles')
 <style>

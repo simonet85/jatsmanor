@@ -34,10 +34,14 @@
                class="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-800 transition {{ request()->routeIs('dashboard.residences') || request()->routeIs('admin.residences.*') ? 'bg-blue-800' : '' }}">
                 <i class="fas fa-building"></i> Gérer les résidences
             </a>
-            <a href="{{ route('dashboard.chambres') }}" 
+            <a href="{{ route('dashboard.amenities') }}" 
+               class="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-800 transition {{ request()->routeIs('dashboard.amenities') || request()->routeIs('admin.amenities.*') ? 'bg-blue-800' : '' }}">
+                <i class="fas fa-wifi"></i> Gérer les équipements
+            </a>
+   {{--            <a href="{{ route('dashboard.chambres') }}" 
                class="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-800 transition {{ request()->routeIs('dashboard.chambres') ? 'bg-blue-800' : '' }}">
                 <i class="fas fa-bed"></i> Gérer les chambres
-            </a>
+            </a> --}}
             <a href="{{ route('dashboard.reservations') }}" 
                class="flex items-center gap-3 px-3 py-2 rounded hover:bg-blue-800 transition {{ request()->routeIs('dashboard.reservations') || request()->routeIs('admin.bookings.*') ? 'bg-blue-800' : '' }}">
                 <i class="fas fa-calendar-alt"></i> Réservations

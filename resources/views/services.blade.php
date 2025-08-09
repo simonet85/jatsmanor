@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Nos Services')
+@section('title', trans('messages.nav.services') . ' - Jatsmanor')
 
 @section('content')
 @include('partials.services-grid')

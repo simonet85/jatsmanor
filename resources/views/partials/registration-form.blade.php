@@ -1,7 +1,7 @@
 <!-- Registration Form -->
 <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
     <h2 class="text-2xl font-bold text-blue-800 mb-6 text-center">
-        {{ $title ?? 'Créer un compte' }}
+        {{ $title ?? trans('messages.auth.register_title') }}
     </h2>
     
     @if ($errors->any())
@@ -24,13 +24,13 @@
         @csrf
         
         <div class="mb-4">
-            <label class="block font-semibold mb-2" for="name">Nom complet</label>
+            <label class="block font-semibold mb-2" for="name">{{ trans('messages.auth.full_name') }}</label>
             <input
                 type="text"
                 id="name"
                 name="name"
                 class="border rounded px-4 py-2 w-full @error('name') border-red-500 @enderror"
-                placeholder="Votre nom complet"
+                placeholder="{{ trans('messages.auth.full_name_placeholder') }}"
                 value="{{ old('name') }}"
                 required
                 autofocus
@@ -41,13 +41,13 @@
         </div>
         
         <div class="mb-4">
-            <label class="block font-semibold mb-2" for="email">Email</label>
+            <label class="block font-semibold mb-2" for="email">{{ trans('messages.auth.email') }}</label>
             <input
                 type="email"
                 id="email"
                 name="email"
                 class="border rounded px-4 py-2 w-full @error('email') border-red-500 @enderror"
-                placeholder="Votre email"
+                placeholder="{{ trans('messages.auth.email_placeholder') }}"
                 value="{{ old('email') }}"
                 required
             />
@@ -57,29 +57,29 @@
         </div>
         
         <div class="mb-4">
-            <label class="block font-semibold mb-2" for="password">Mot de passe</label>
+            <label class="block font-semibold mb-2" for="password">{{ trans('messages.auth.password') }}</label>
             <input
                 type="password"
                 id="password"
                 name="password"
                 class="border rounded px-4 py-2 w-full @error('password') border-red-500 @enderror"
-                placeholder="Choisissez un mot de passe"
+                placeholder="{{ trans('messages.auth.choose_password') }}"
                 required
             />
             @error('password')
                 <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
-            <p class="text-xs text-gray-500 mt-1">Minimum 8 caractères</p>
+            <p class="text-xs text-gray-500 mt-1">{{ trans('messages.auth.password_min') }}</p>
         </div>
         
         <div class="mb-4">
-            <label class="block font-semibold mb-2" for="password_confirmation">Confirmer le mot de passe</label>
+            <label class="block font-semibold mb-2" for="password_confirmation">{{ trans('messages.auth.confirm_password') }}</label>
             <input
                 type="password"
                 id="password_confirmation"
                 name="password_confirmation"
                 class="border rounded px-4 py-2 w-full @error('password_confirmation') border-red-500 @enderror"
-                placeholder="Répétez le mot de passe"
+                placeholder="{{ trans('messages.auth.repeat_password') }}"
                 required
             />
             @error('password_confirmation')
@@ -96,14 +96,14 @@
                     required
                 />
                 <span class="ml-2 text-sm">
-                    J'accepte les 
+                    {{ trans('messages.auth.accept_terms_start') }} 
                     @if (Route::has('terms'))
                         <a href="{{ route('terms') }}" class="text-blue-700 hover:underline" target="_blank">
-                            conditions d'utilisation
+                            {{ trans('messages.auth.terms_conditions') }}
                         </a>
                     @else
                         <a href="#" class="text-blue-700 hover:underline">
-                            conditions d'utilisation
+                            {{ trans('messages.auth.terms_conditions') }}
                         </a>
                     @endif
                 </span>
@@ -122,7 +122,7 @@
                     {{ old('newsletter') ? 'checked' : '' }}
                 />
                 <span class="ml-2 text-sm">
-                    Je souhaite recevoir les offres et actualités par email
+                    {{ trans('messages.auth.newsletter_consent') }}
                 </span>
             </label>
         </div>
@@ -131,19 +131,19 @@
             type="submit"
             class="bg-blue-800 hover:bg-blue-900 text-white px-6 py-2 rounded font-semibold w-full transition duration-200"
         >
-            S'inscrire
+            {{ trans('messages.auth.register_button') }}
         </button>
     </form>
     
     <div class="mt-6 text-center text-sm">
-        Déjà inscrit ?
+        {{ trans('messages.auth.already_registered') }}
         @if (Route::has('login'))
             <a href="{{ route('login') }}" class="text-blue-700 hover:underline font-semibold">
-                Se connecter
+                {{ trans('messages.auth.login_link') }}
             </a>
         @else
             <a href="{{ route('connexion') }}" class="text-blue-700 hover:underline font-semibold">
-                Se connecter
+                {{ trans('messages.auth.login_link') }}
             </a>
         @endif
     </div>

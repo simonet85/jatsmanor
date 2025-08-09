@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Inscription - Jatsmanor')
+@section('title', trans('messages.auth.register_title') . ' - Jatsmanor')
 
 @section('styles')
 <style>

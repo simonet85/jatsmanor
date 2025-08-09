@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $residence['name'] ?? 'Chambre Single')
+@section('title', getResidenceName($residence) ?? 'Chambre Single')
 
 @section('content')
 @include('partials.breadcrumb')

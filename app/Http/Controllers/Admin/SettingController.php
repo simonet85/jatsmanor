@@ -100,7 +100,7 @@ class SettingController extends Controller
             'cancellation_hours' => 'required|integer|min:0',
             'cleaning_fee' => 'required|integer|min:0',
             'security_deposit' => 'required|integer|min:0',
-            'auto_confirm_bookings' => 'boolean',
+            'auto_confirm_bookings' => 'nullable|boolean',
         ]);
 
         if ($validator->fails()) {
@@ -170,6 +170,56 @@ class SettingController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Paramètres frontend mis à jour avec succès'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur lors de la mise à jour: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Update language settings
+     */
+    public function updateLanguage(Request $request)
+    {
+        // Debug: Log the request data
+        \Log::info('Language settings update request:', [
+            'all_data' => $request->all(),
+            'has_checkbox' => $request->has('show_language_selector'),
+            'checkbox_value' => $request->get('show_language_selector')
+        ]);
+
+        $validator = Validator::make($request->all(), [
+            'show_language_selector' => 'nullable|in:on,1,true,0,false',
+            'default_language' => 'required|in:fr,en',
+        ]);
+
+        if ($validator->fails()) {
+            \Log::error('Language settings validation failed:', [
+                'errors' => $validator->errors()->toArray(),
+                'request_data' => $request->all()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur de validation',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            // Handle checkbox value properly (can be 'on', '1', 'true', or absent)
+            $showSelector = $request->has('show_language_selector') && 
+                           in_array($request->show_language_selector, ['on', '1', 'true', true]) ? '1' : '0';
+            
+            Setting::set('show_language_selector', $showSelector, 'boolean', 'language');
+            Setting::set('default_language', $request->default_language, 'select', 'language');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Paramètres de langue mis à jour avec succès'
             ]);
         } catch (\Exception $e) {
             return response()->json([

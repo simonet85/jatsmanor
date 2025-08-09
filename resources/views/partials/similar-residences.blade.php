@@ -1,6 +1,6 @@
 <!-- Similar residences section -->
 <section class="max-w-7xl mx-auto px-4 py-8">
-  <h3 class="text-xl font-bold mb-6">{{ $sectionTitle ?? 'Résidences similaires' }}</h3>
+  <h3 class="text-xl font-bold mb-6">{{ $sectionTitle ?? trans('messages.similar_residences.title') }}</h3>
   <div class="grid md:grid-cols-3 gap-6">
     @if(isset($similarResidences) && $similarResidences->count() > 0)
       @foreach($similarResidences as $residence)
@@ -8,7 +8,7 @@
           @if($residence->images->count() > 0)
             <img
               src="{{ asset('storage/' . $residence->images->first()->image_path) }}"
-              alt="{{ $residence->name }}"
+              alt="{{ function_exists('getResidenceName') ? getResidenceName($residence) : $residence->name }}"
               class="w-full h-40 object-cover"
             />
           @elseif($residence->image)
@@ -24,8 +24,8 @@
           @endif
           
           <div class="p-4">
-            <h4 class="text-lg font-semibold mb-1">{{ $residence->name }}</h4>
-            <p class="text-sm text-gray-600 mb-2">{{ Str::limit($residence->short_description ?? $residence->description, 80) }}</p>
+            <h4 class="text-lg font-semibold mb-1">{{ getResidenceName($residence) }}</h4>
+            <p class="text-sm text-gray-600 mb-2">{{ Str::limit(getResidenceShortDescription($residence) ?? getResidenceDescription($residence), 80) }}</p>
             
             @if($residence->amenities->count() > 0)
               <ul class="flex flex-wrap gap-2 text-xs text-gray-700 mb-3">
@@ -43,7 +43,7 @@
               href="{{ route('residence.details', $residence) }}"
               class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded text-sm"
             >
-              Voir la fiche
+              {{ trans('messages.similar_residences.view_details') }}
             </a>
           </div>
         </div>
@@ -53,31 +53,31 @@
       <div class="bg-white shadow rounded overflow-hidden">
         <img
           src="{{ asset('images/residences/chambre2.jpg') }}"
-          alt="Chambre Double"
+          alt="{{ trans('messages.room.double') }}"
           class="w-full h-40 object-cover"
         />
         <div class="p-4">
-          <h4 class="text-lg font-semibold mb-1">Chambre Double</h4>
+          <h4 class="text-lg font-semibold mb-1">{{ trans('messages.room.double') }}</h4>
           <p class="text-sm text-gray-600 mb-2">
-            Lit 2 places, balcon, cuisine
+            {{ trans('messages.room.double_description') }}
           </p>
           <ul class="flex flex-wrap gap-2 text-xs text-gray-700 mb-3">
             <li class="flex items-center gap-1">
-              <i class="fas fa-wifi text-blue-700"></i> Wi-Fi
+              <i class="fas fa-wifi text-blue-700"></i> {{ trans('messages.amenities.wifi') }}
             </li>
             <li class="flex items-center gap-1">
-              <i class="fas fa-utensils text-blue-700"></i> Cuisine équipée
+              <i class="fas fa-utensils text-blue-700"></i> {{ trans('messages.amenities.kitchen') }}
             </li>
             <li class="flex items-center gap-1">
-              <i class="fas fa-tv text-blue-700"></i> Télévision + Netflix
+              <i class="fas fa-tv text-blue-700"></i> {{ trans('messages.amenities.tv_netflix') }}
             </li>
           </ul>
-          <p class="text-blue-700 font-bold mb-2">25.000 FCFA / nuit</p>
+          <p class="text-blue-700 font-bold mb-2">25.000 FCFA / {{ trans('messages.booking.per_night') }}</p>
           <a
             href="#"
             class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded text-sm"
           >
-            Voir la fiche
+            {{ trans('messages.similar_residences.view_details') }}
           </a>
         </div>
       </div>

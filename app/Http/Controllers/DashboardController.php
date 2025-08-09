@@ -83,6 +83,12 @@ class DashboardController extends Controller
         return redirect()->route('admin.settings.index');
     }
 
+    public function amenities()
+    {
+        // Rediriger vers le nouveau contrôleur de gestion des équipements
+        return redirect()->route('admin.amenities.index');
+    }
+
     public function monCompte()
     {
         return view('dashboard.mon-compte');

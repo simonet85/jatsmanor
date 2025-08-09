@@ -17,24 +17,40 @@ class GalleryController extends Controller
             }])
             ->get();
 
-        // Préparer les données pour la galerie
+        // Mapping des locations vers les clés de traduction
+        $locationToKey = [
+            'Cocody' => 'category_cocody',
+            'Cocody, Abidjan' => 'category_cocody_abidjan',
+            'Marcory, Abidjan' => 'category_marcory_abidjan',
+            'Plateau, Abidjan' => 'category_plateau_abidjan',
+            'Yopougon' => 'category_yopougon',
+            'Yoppongon' => 'category_yoppongon',
+        ];
+
         $galleryItems = collect();
         $categories = collect();
 
         foreach ($residences as $residence) {
-            // Ajouter la catégorie (utiliser location comme catégorie pour l'instant)
-            if ($residence->location) {
-                $categories->push($residence->location);
+            // Utiliser la clé de traduction pour la catégorie
+            $categoryKey = $locationToKey[$residence->location] ?? \Illuminate\Support\Str::slug($residence->location, '_');
+            // Remove any accidental double 'category_' prefix
+            if (strpos($categoryKey, 'category_category_') === 0) {
+                $categoryKey = substr($categoryKey, 16); // remove 'category_category_'
             }
+            // Remove any accidental single 'category_' prefix if double was not found
+            elseif (strpos($categoryKey, 'category_') === 0 && substr_count($categoryKey, 'category_') > 1) {
+                $categoryKey = preg_replace('/^category_+/', 'category_', $categoryKey);
+            }
+            $categories->push($categoryKey);
 
             // Images de la nouvelle structure
             foreach ($residence->images as $image) {
                 $galleryItems->push([
                     'id' => $image->id,
                     'image_path' => $image->image_path,
-                    'title' => $residence->name, // utiliser 'name' au lieu de 'title'
+                    'title' => $residence->name,
                     'description' => $image->description ?? $residence->description,
-                    'category' => $residence->location, // utiliser location comme catégorie
+                    'category' => $categoryKey,
                     'residence_id' => $residence->id,
                     'is_primary' => $image->is_primary,
                     'order' => $image->order,
@@ -52,7 +68,7 @@ class GalleryController extends Controller
                             'image_path' => $imagePath,
                             'title' => $residence->name,
                             'description' => $residence->description,
-                            'category' => $residence->location,
+                            'category' => $categoryKey,
                             'residence_id' => $residence->id,
                             'is_primary' => $index === 0,
                             'order' => $index,
@@ -69,7 +85,7 @@ class GalleryController extends Controller
                     'image_path' => $residence->image,
                     'title' => $residence->name,
                     'description' => $residence->description,
-                    'category' => $residence->location,
+                    'category' => $categoryKey,
                     'residence_id' => $residence->id,
                     'is_primary' => true,
                     'order' => 0,

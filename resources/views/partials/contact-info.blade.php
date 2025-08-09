@@ -1,11 +1,11 @@
 <!-- Contact Information -->
 <div class="bg-white rounded-lg shadow p-6 flex flex-col justify-center">
-    <h3 class="font-semibold text-lg mb-4">{{ $title ?? 'Nos coordonnées' }}</h3>
+    <h3 class="font-semibold text-lg mb-4">{{ $title ?? trans('messages.contact_page.contact_info_title') }}</h3>
     
     <ul class="space-y-4 text-gray-700 text-sm">
         <li>
             <i class="fas fa-location-dot text-blue-700 mr-2"></i>
-            {{ $address ?? '123 Cocody Résidentiel, Abidjan' }}
+            {{ $address ?? trans('messages.contact.address') . ', ' . trans('messages.contact.city') }}
         </li>
         <li>
             <i class="fas fa-phone text-blue-700 mr-2"></i>
@@ -17,12 +17,12 @@
         </li>
         <li>
             <i class="fas fa-clock text-blue-700 mr-2"></i>
-            {{ $hours ?? 'Service client 24h/24' }}
+            {{ $hours ?? trans('messages.contact_page.service_24_7') }}
         </li>
     </ul>
     
     <div class="mt-6">
-        <h4 class="font-semibold mb-2">{{ $socialTitle ?? 'Suivez-nous' }}</h4>
+        <h4 class="font-semibold mb-2">{{ $socialTitle ?? trans('messages.contact_page.follow_us') }}</h4>
         <div class="flex gap-4 text-xl">
             @if(isset($socialLinks))
                 @foreach($socialLinks as $platform => $url)

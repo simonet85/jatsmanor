@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Mot de passe oublié - Jatsmanor')
+@section('title', trans('messages.auth.forgot_password_title') . ' - Jatsmanor')
 
 @section('styles')
 <style>

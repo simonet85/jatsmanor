@@ -17,3 +17,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Translation API routes
+Route::prefix('translation')->group(function () {
+    Route::get('/status', [App\Http\Controllers\Api\TranslationController::class, 'status']);
+    Route::post('/translate', [App\Http\Controllers\Api\TranslationController::class, 'translate']);
+    Route::post('/test-observer', [App\Http\Controllers\Api\TranslationController::class, 'testObserver']);
+    Route::get('/residences-status', [App\Http\Controllers\Api\TranslationController::class, 'residencesStatus']);
+    Route::post('/translate-all', [App\Http\Controllers\Api\TranslationController::class, 'translateAll']);
+});

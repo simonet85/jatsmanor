@@ -3,19 +3,19 @@
     <form method="GET" action="{{ route('residences') }}" class="flex flex-wrap gap-4 items-center w-full">
         <div class="flex flex-wrap gap-4 items-center flex-1">
             <div>
-                <label class="block text-xs font-semibold mb-1">Type de chambre</label>
+                <label class="block text-xs font-semibold mb-1">{{ trans('messages.filters.room_type') }}</label>
                 <select name="type" class="border p-2 rounded w-40">
-                    <option value="">Toutes</option>
-                    <option value="single" {{ request('type') == 'single' ? 'selected' : '' }}>Single</option>
-                    <option value="double" {{ request('type') == 'double' ? 'selected' : '' }}>Double</option>
-                    <option value="suite" {{ request('type') == 'suite' ? 'selected' : '' }}>Suite</option>
+                    <option value="">{{ trans('messages.filters.all') }}</option>
+                    <option value="single" {{ request('type') == 'single' ? 'selected' : '' }}>{{ trans('messages.room.single') }}</option>
+                    <option value="double" {{ request('type') == 'double' ? 'selected' : '' }}>{{ trans('messages.room.double') }}</option>
+                    <option value="suite" {{ request('type') == 'suite' ? 'selected' : '' }}>{{ trans('messages.room.suite') }}</option>
                 </select>
             </div>
             
             <div>
-                <label class="block text-xs font-semibold mb-1">Prix max</label>
+                <label class="block text-xs font-semibold mb-1">{{ trans('messages.filters.max_price') }}</label>
                 <select name="price_max" class="border p-2 rounded w-32">
-                    <option value="">Indifférent</option>
+                    <option value="">{{ trans('messages.filters.any') }}</option>
                     <option value="15000" {{ request('price_max') == '15000' ? 'selected' : '' }}>15 000 XOF</option>
                     <option value="25000" {{ request('price_max') == '25000' ? 'selected' : '' }}>25 000 XOF</option>
                     <option value="40000" {{ request('price_max') == '40000' ? 'selected' : '' }}>40 000 XOF</option>
@@ -23,13 +23,13 @@
             </div>
             
             <div>
-                <label class="block text-xs font-semibold mb-1">Équipements</label>
+                <label class="block text-xs font-semibold mb-1">{{ trans('messages.filters.amenities') }}</label>
                 <select name="amenity" class="border p-2 rounded w-40">
-                    <option value="">Indifférent</option>
-                    <option value="wifi" {{ request('amenity') == 'wifi' ? 'selected' : '' }}>Wi-Fi</option>
-                    <option value="ac" {{ request('amenity') == 'ac' ? 'selected' : '' }}>Climatisation</option>
-                    <option value="parking" {{ request('amenity') == 'parking' ? 'selected' : '' }}>Parking</option>
-                    <option value="netflix" {{ request('amenity') == 'netflix' ? 'selected' : '' }}>Netflix</option>
+                    <option value="">{{ trans('messages.filters.any') }}</option>
+                    <option value="wifi" {{ request('amenity') == 'wifi' ? 'selected' : '' }}>{{ trans('messages.amenities.wifi') }}</option>
+                    <option value="ac" {{ request('amenity') == 'ac' ? 'selected' : '' }}>{{ trans('messages.amenities.ac') }}</option>
+                    <option value="parking" {{ request('amenity') == 'parking' ? 'selected' : '' }}>{{ trans('messages.amenities.parking') }}</option>
+                    <option value="netflix" {{ request('amenity') == 'netflix' ? 'selected' : '' }}>{{ trans('messages.amenities.netflix') }}</option>
                 </select>
             </div>
             
@@ -52,12 +52,12 @@
         
         <div class="flex gap-2">
             <button type="submit" class="bg-blue-800 hover:bg-blue-900 text-white font-semibold px-4 py-2 rounded flex items-center gap-2 transition duration-200">
-                <i class="fas fa-filter"></i> Filtrer
+                <i class="fas fa-filter"></i> {{ trans('messages.filters.filter') }}
             </button>
             
             @if(request()->hasAny(['type', 'price_max', 'amenity']))
                 <a href="{{ route('residences') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold px-4 py-2 rounded flex items-center gap-2 transition duration-200">
-                    <i class="fas fa-times"></i> Réinitialiser
+                    <i class="fas fa-times"></i> {{ trans('messages.filters.reset') }}
                 </a>
             @endif
         </div>

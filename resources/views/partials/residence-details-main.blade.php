@@ -44,7 +44,11 @@
     
     <h2 class="text-2xl font-bold mb-2">
       @if(isset($residence) && is_object($residence))
-        {{ $residence->name }}
+        @if(app()->getLocale() === 'en' && !empty($residence->name_en))
+          {{ $residence->name_en }}
+        @else
+          {{ $residence->name }}
+        @endif
       @else
         {{ $residence['name'] ?? 'Chambre Single' }}
       @endif
@@ -70,7 +74,15 @@
     
     <p class="text-gray-700 mb-4">
       @if(isset($residence) && is_object($residence))
-        {{ $residence->description }}
+        @if(app()->getLocale() === 'en')
+          @if(!empty($residence->description_en))
+            {{ $residence->description_en }}
+          @else
+            {{ $residence->description }}
+          @endif
+        @else
+          {{ $residence->description }}
+        @endif
       @else
         {{ $residence['description'] ?? 'Lit 1 place, salle de bain privée, idéale pour voyageurs solo ou professionnels. Profitez d\'un confort moderne et d\'une sécurité optimale.' }}
       @endif

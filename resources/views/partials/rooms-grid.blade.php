@@ -2,6 +2,14 @@
 <div class="grid md:grid-cols-3 gap-6">
     @if(isset($rooms) && count($rooms) > 0)
         @foreach($rooms as $room)
+            @php
+                if (function_exists('getResidenceName')) {
+                    $room->name = getResidenceName($room);
+                }
+                if (function_exists('getResidenceDescription')) {
+                    $room->description = getResidenceDescription($room);
+                }
+            @endphp
             @include('partials.room-card', ['room' => $room])
         @endforeach
     @else

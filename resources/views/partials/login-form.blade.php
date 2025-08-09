@@ -1,7 +1,7 @@
 <!-- Login Form -->
 <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
     <h2 class="text-2xl font-bold text-blue-800 mb-6 text-center">
-        {{ $title ?? 'Connexion à Jatsmanor' }}
+        {{ $title ?? trans('messages.auth.login_title') }}
     </h2>
     
     @if ($errors->any())
@@ -24,13 +24,13 @@
         @csrf
         
         <div class="mb-4">
-            <label class="block font-semibold mb-2" for="email">Email</label>
+            <label class="block font-semibold mb-2" for="email">{{ trans('messages.auth.email') }}</label>
             <input
                 type="email"
                 id="email"
                 name="email"
                 class="border rounded px-4 py-2 w-full @error('email') border-red-500 @enderror"
-                placeholder="Votre email"
+                placeholder="{{ trans('messages.auth.email_placeholder') }}"
                 value="{{ old('email') }}"
                 required
                 autofocus
@@ -41,13 +41,13 @@
         </div>
         
         <div class="mb-4">
-            <label class="block font-semibold mb-2" for="password">Mot de passe</label>
+            <label class="block font-semibold mb-2" for="password">{{ trans('messages.auth.password') }}</label>
             <input
                 type="password"
                 id="password"
                 name="password"
                 class="border rounded px-4 py-2 w-full @error('password') border-red-500 @enderror"
-                placeholder="Votre mot de passe"
+                placeholder="{{ trans('messages.auth.password_placeholder') }}"
                 required
             />
             @error('password')
@@ -63,11 +63,11 @@
                     class="form-checkbox accent-blue-700 h-5 w-5"
                     {{ old('remember') ? 'checked' : '' }}
                 />
-                <span class="ml-2 text-sm">Se souvenir de moi</span>
+                <span class="ml-2 text-sm">{{ trans('messages.auth.remember_me') }}</span>
             </label>
             @if (Route::has('password.request'))
                 <a href="{{ route('password.request') }}" class="text-blue-700 text-sm hover:underline">
-                    Mot de passe oublié ?
+                    {{ trans('messages.auth.forgot_password') }}
                 </a>
             @endif
         </div>
@@ -76,19 +76,19 @@
             type="submit"
             class="bg-blue-800 hover:bg-blue-900 text-white px-6 py-2 rounded font-semibold w-full transition duration-200"
         >
-            Se connecter
+            {{ trans('messages.auth.login_button') }}
         </button>
     </form>
     
     <div class="mt-6 text-center text-sm">
-        Pas encore de compte ?
+        {{ trans('messages.auth.no_account') }}
         @if (Route::has('register'))
             <a href="{{ route('register') }}" class="text-blue-700 hover:underline font-semibold">
-                Créer un compte
+                {{ trans('messages.auth.create_account') }}
             </a>
         @else
             <a href="{{ route('contact') }}" class="text-blue-700 hover:underline font-semibold">
-                Nous contacter
+                {{ trans('messages.auth.contact_us') }}
             </a>
         @endif
     </div>

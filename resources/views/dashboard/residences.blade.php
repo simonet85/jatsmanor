@@ -233,6 +233,15 @@
                         </label>
                     </div>
                 </div>
+
+                <!-- Équipements -->
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Équipements disponibles</label>
+                    <div id="amenities-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                        <!-- Les équipements seront chargés dynamiquement ici -->
+                    </div>
+                    <div class="text-red-500 text-sm mt-1 hidden" id="amenities-error"></div>
+                </div>
             </div>
             
             <div class="flex justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
@@ -336,6 +345,10 @@ function openModal(title = 'Ajouter une résidence', residenceSlug = null) {
     clearErrors();
     document.getElementById('current-image').classList.add('hidden');
     
+    // Load amenities
+    console.log('Loading amenities...');
+    loadAmenities();
+    
     if (residenceSlug) {
         loadResidenceData(residenceSlug);
     }
@@ -417,6 +430,12 @@ async function loadResidenceData(residenceSlug) {
             
             // Charger les images secondaires
             await loadResidenceImages(residenceSlug);
+            
+            // Charger les équipements de la résidence
+            if (residence.amenities) {
+                const selectedAmenities = residence.amenities.map(amenity => amenity.id);
+                updateAmenitiesSelection(selectedAmenities);
+            }
         }
     } catch (error) {
         console.error('Erreur lors du chargement des données:', error);
@@ -950,5 +969,103 @@ document.addEventListener('DOMContentLoaded', function() {
     attachEventListeners();
     console.log('Initialization complete');
 });
+
+// Fonctions pour la gestion des équipements
+async function loadAmenities() {
+    try {
+        // Try the AJAX endpoint first
+        let response = await fetch('/admin/amenities/ajax', {
+            method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            credentials: 'same-origin'
+        });
+        
+        // If AJAX endpoint fails, try the regular endpoint
+        if (!response.ok || !response.headers.get('content-type')?.includes('application/json')) {
+            console.log('AJAX endpoint failed, trying regular endpoint...');
+            response = await fetch('/admin/amenities', {
+                method: 'GET',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                credentials: 'same-origin'
+            });
+        }
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            throw new Error('Response is not JSON - you may need to log in as administrator');
+        }
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const container = document.getElementById('amenities-container');
+            container.innerHTML = '';
+            
+            data.amenities.forEach(amenity => {
+                const amenityElement = document.createElement('div');
+                amenityElement.className = 'flex items-center space-x-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50';
+                amenityElement.innerHTML = `
+                    <input type="checkbox" 
+                           id="amenity-${amenity.id}" 
+                           name="amenities[]" 
+                           value="${amenity.id}" 
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                    <label for="amenity-${amenity.id}" class="flex items-center space-x-2 cursor-pointer">
+                        <i class="${amenity.icon || 'fas fa-check'} text-blue-600"></i>
+                        <span class="text-sm text-gray-700">${amenity.name}</span>
+                    </label>
+                `;
+                container.appendChild(amenityElement);
+            });
+        } else {
+            throw new Error(data.message || 'Erreur lors du chargement des équipements');
+        }
+    } catch (error) {
+        console.error('Erreur lors du chargement des équipements:', error);
+        showToast('Erreur lors du chargement des équipements: ' + error.message, 'error');
+        
+        // Afficher un message d'erreur dans le conteneur
+        const container = document.getElementById('amenities-container');
+        container.innerHTML = `
+            <div class="col-span-full text-center py-4">
+                <i class="fas fa-exclamation-triangle text-red-500 text-xl mb-2"></i>
+                <p class="text-red-600 text-sm">Impossible de charger les équipements</p>
+                <p class="text-gray-500 text-xs mt-1">Vérifiez que vous êtes connecté en tant qu'administrateur</p>
+                <button onclick="loadAmenities()" class="mt-2 px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">
+                    Réessayer
+                </button>
+            </div>
+        `;
+    }
+}
+
+function updateAmenitiesSelection(selectedAmenityIds) {
+    // Décocher toutes les cases
+    document.querySelectorAll('input[name="amenities[]"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    
+    // Cocher les équipements sélectionnés
+    selectedAmenityIds.forEach(amenityId => {
+        const checkbox = document.getElementById(`amenity-${amenityId}`);
+        if (checkbox) {
+            checkbox.checked = true;
+        }
+    });
+}
 </script>
 @endpush

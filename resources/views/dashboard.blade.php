@@ -75,6 +75,7 @@
                     <p class="text-sm text-gray-600">Gestion des comptes</p>
                 </div>
             </div>
+        </a>
         </div>
     </div>
 

@@ -33,7 +33,7 @@ class HomeController extends Controller
         $testimonials = collect();
         
         try {
-            if (\Schema::hasTable('reviews')) {
+            if (Schema::hasTable('reviews')) {
                 $testimonials = Review::approved()
                     ->with(['user', 'residence'])
                     ->where('rating', '>=', 4)
@@ -74,12 +74,18 @@ class HomeController extends Controller
             return (object)[
                 'id' => $residence->id,
                 'slug' => $residence->slug,
+                'name' => $residence->name,
                 'nom' => $residence->name,
-                'description' => $residence->short_description,
+                'description' => $residence->description,
+                'short_description' => $residence->short_description,
                 'prix' => $residence->price,
                 'image' => $residence->image,
                 'is_active' => $residence->is_active,
                 'price_per_night' => $residence->price_per_night,
+                // Add translation fields
+                'name_en' => $residence->name_en,
+                'description_en' => $residence->description_en,
+                'short_description_en' => $residence->short_description_en,
             ];
         });
 
@@ -107,7 +113,105 @@ class HomeController extends Controller
 
     public function galerie()
     {
-        return view('galerie');
+        // Récupérer toutes les résidences disponibles avec leurs images
+        $residences = \App\Models\Residence::where('availability_status', 'available')
+            ->with(['images' => function ($query) {
+                $query->orderBy('order');
+            }])
+            ->get();
+
+        // Mapping des locations vers les clés de traduction
+        $locationToKey = [
+            'Cocody' => 'category_cocody',
+            'Cocody, Abidjan' => 'category_cocody_abidjan',
+            'Marcory, Abidjan' => 'category_marcory_abidjan',
+            'Plateau, Abidjan' => 'category_plateau_abidjan',
+            'Yopougon' => 'category_yopougon',
+            'Yoppongon' => 'category_yoppongon',
+        ];
+
+        $galleryItems = collect();
+        $categories = collect();
+
+        foreach ($residences as $residence) {
+            // Utiliser la clé de traduction pour la catégorie
+            $categoryKey = $locationToKey[$residence->location] ?? \Illuminate\Support\Str::slug($residence->location, '_');
+            // Remove any accidental double 'category_' prefix
+            if (strpos($categoryKey, 'category_category_') === 0) {
+                $categoryKey = substr($categoryKey, 16); // remove 'category_category_'
+            }
+            // Remove any accidental single 'category_' prefix if double was not found
+            elseif (strpos($categoryKey, 'category_') === 0 && substr_count($categoryKey, 'category_') > 1) {
+                $categoryKey = preg_replace('/^category_+/', 'category_', $categoryKey);
+            }
+            $categories->push($categoryKey);
+
+            // Images de la nouvelle structure
+            foreach ($residence->images as $image) {
+                $galleryItems->push([
+                    'id' => $image->id,
+                    'image_path' => $image->image_path,
+                    'title' => $residence->name,
+                    'description' => $image->description ?? $residence->description,
+                    'category' => $categoryKey,
+                    'residence_id' => $residence->id,
+                    'is_primary' => $image->is_primary,
+                    'order' => $image->order,
+                    'residence' => $residence
+                ]);
+            }
+
+            // Fallback pour les anciennes images (si la colonne images existe)
+            if ($residence->images->isEmpty() && isset($residence->images_json)) {
+                $images = json_decode($residence->images_json, true);
+                if (is_array($images)) {
+                    foreach ($images as $index => $imagePath) {
+                        $galleryItems->push([
+                            'id' => 'legacy_' . $residence->id . '_' . $index,
+                            'image_path' => $imagePath,
+                            'title' => $residence->name,
+                            'description' => $residence->description,
+                            'category' => $categoryKey,
+                            'residence_id' => $residence->id,
+                            'is_primary' => $index === 0,
+                            'order' => $index,
+                            'residence' => $residence
+                        ]);
+                    }
+                }
+            }
+
+            // Si pas d'images dans images et pas d'ancien système, utiliser l'image principale
+            if ($residence->images->isEmpty() && !isset($residence->images_json) && $residence->image) {
+                $galleryItems->push([
+                    'id' => 'main_' . $residence->id,
+                    'image_path' => $residence->image,
+                    'title' => $residence->name,
+                    'description' => $residence->description,
+                    'category' => $categoryKey,
+                    'residence_id' => $residence->id,
+                    'is_primary' => true,
+                    'order' => 0,
+                    'residence' => $residence
+                ]);
+            }
+        }
+
+        // Trier par ordre et images principales en premier
+        $galleryItems = $galleryItems->sortBy([
+            ['is_primary', 'desc'],
+            ['order', 'asc']
+        ]);
+
+        // Obtenir les catégories uniques
+        $categories = $categories->unique()->sort()->values();
+
+        return view('galerie', [
+            'galleryItems' => $galleryItems,
+            'categories' => $categories,
+            'pageTitle' => 'Galerie Jatsmanor',
+            'subtitle' => 'Découvrez nos magnifiques résidences et leurs aménagements'
+        ]);
     }
 
     public function services()

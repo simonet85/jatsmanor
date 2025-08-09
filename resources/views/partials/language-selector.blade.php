@@ -1,3 +1,4 @@
+@if(setting('show_language_selector', 1))
 <!-- Sélecteur de langue avec drapeaux -->
 <div class="relative inline-block text-left" id="language-selector">
     <!-- Bouton principal -->
@@ -211,3 +212,4 @@ document.addEventListener('keydown', function(event) {
     }
 });
 </script>
+@endif

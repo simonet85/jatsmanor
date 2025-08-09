@@ -1,11 +1,11 @@
 <!-- Forgot Password Form -->
 <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
     <h2 class="text-2xl font-bold text-blue-800 mb-6 text-center">
-        {{ $title ?? 'Mot de passe oublié' }}
+        {{ $title ?? trans('messages.auth.forgot_password_title') }}
     </h2>
     
     <div class="mb-4 text-sm text-gray-600 text-center">
-        Vous avez oublié votre mot de passe ? Pas de problème. Indiquez simplement votre adresse email et nous vous enverrons un lien de réinitialisation.
+        {{ trans('messages.auth.forgot_password_desc') }}
     </div>
 
     @if (session('status'))
@@ -28,13 +28,13 @@
         @csrf
         
         <div class="mb-6">
-            <label class="block font-semibold mb-2" for="email">Email</label>
+            <label class="block font-semibold mb-2" for="email">{{ trans('messages.auth.email') }}</label>
             <input
                 type="email"
                 id="email"
                 name="email"
                 class="border rounded px-4 py-2 w-full @error('email') border-red-500 @enderror"
-                placeholder="Votre adresse email"
+                placeholder="{{ trans('messages.auth.email_placeholder') }}"
                 value="{{ old('email') }}"
                 required
                 autofocus
@@ -48,14 +48,14 @@
             type="submit"
             class="bg-blue-800 hover:bg-blue-900 text-white px-6 py-2 rounded font-semibold w-full transition duration-200"
         >
-            Envoyer le lien de réinitialisation
+            {{ trans('messages.auth.send_reset_link') }}
         </button>
     </form>
     
     <div class="mt-6 text-center text-sm">
-        Vous vous souvenez de votre mot de passe ?
+        {{ trans('messages.auth.remember_password') }}
         <a href="{{ route('login') }}" class="text-blue-700 hover:underline font-semibold">
-            Se connecter
+            {{ trans('messages.auth.login_link') }}
         </a>
     </div>
 </div>

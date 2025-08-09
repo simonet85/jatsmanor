@@ -5,11 +5,9 @@
 @section('content')
 <div class="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-12">
     <div class="max-w-7xl mx-auto px-4">
-        <h1 class="text-3xl font-bold mb-4">Résultats de recherche</h1>
+    <h1 class="text-3xl font-bold mb-4">{{ trans('messages.search_results.title') }}</h1>
         <p class="text-blue-100">
-            {{ $residences->count() }} résidence(s) disponible(s) pour {{ $nights }} nuit(s)
-            du {{ $arrival_date->format('d/m/Y') }} au {{ $departure_date->format('d/m/Y') }}
-            pour {{ $guests }} invité(s)
+            {{ trans_choice('messages.search_results.available', $residences->count(), ['count' => $residences->count(), 'nights' => $nights, 'arrival' => $arrival_date->format('d/m/Y'), 'departure' => $departure_date->format('d/m/Y'), 'guests' => $guests]) }}
         </p>
     </div>
 </div>
@@ -33,12 +31,18 @@
                     @endif
                     
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $residence->name }}</h3>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                            @if(app()->getLocale() === 'en' && !empty($residence->name_en))
+                                {{ $residence->name_en }}
+                            @else
+                                {{ $residence->name }}
+                            @endif
+                        </h3>
                         <p class="text-gray-600 mb-2">
                             <i class="fas fa-map-marker-alt mr-1"></i>{{ $residence->location }}
                         </p>
                         <p class="text-gray-600 mb-2">
-                            <i class="fas fa-users mr-1"></i>Jusqu'à {{ $residence->capacity }} invité(s)
+                            <i class="fas fa-users mr-1"></i>{{ trans('messages.search_results.up_to') }} {{ $residence->capacity }} {{ trans('messages.search_results.guests') }}
                         </p>
                         @if($residence->surface)
                             <p class="text-gray-600 mb-4">
@@ -57,7 +61,7 @@
                                     @endforeach
                                     @if($residence->amenities->count() > 3)
                                         <span class="text-gray-500 text-xs">
-                                            +{{ $residence->amenities->count() - 3 }} autres
+                                            +{{ $residence->amenities->count() - 3 }} {{ trans('messages.search_results.others') }}
                                         </span>
                                     @endif
                                 </div>
@@ -70,13 +74,13 @@
                                 <p class="text-2xl font-bold text-blue-600">
                                     {{ format_fcfa($residence->price_per_night) }}
                                 </p>
-                                <p class="text-sm text-gray-500">par nuit</p>
+                                <p class="text-sm text-gray-500">{{ trans('messages.search_results.per_night') }}</p>
                             </div>
                             <div class="text-right">
                                 <p class="text-lg font-semibold">
                                     {{ format_fcfa($residence->price_per_night * $nights) }}
                                 </p>
-                                <p class="text-sm text-gray-500">{{ $nights }} nuit(s)</p>
+                                <p class="text-sm text-gray-500">{{ $nights }} {{ trans('messages.search_results.nights') }}</p>
                             </div>
                         </div>
                         
@@ -84,11 +88,11 @@
                         <div class="flex gap-2">
                             <a href="{{ route('residences.show', $residence) }}" 
                                class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 text-center py-2 px-4 rounded transition-colors">
-                                Voir détails
+                                {{ trans('messages.search_results.view_details') }}
                             </a>
                             <a href="{{ route('booking.create', ['residence' => $residence, 'arrival_date' => $arrival_date->format('Y-m-d'), 'departure_date' => $departure_date->format('Y-m-d'), 'guests' => $guests]) }}" 
                                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded transition-colors">
-                                Réserver
+                                {{ trans('messages.search_results.book') }}
                             </a>
                         </div>
                     </div>

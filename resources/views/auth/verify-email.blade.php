@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Vérification email - Jatsmanor')
+@section('title', trans('messages.auth.verify_email_title') . ' - Jatsmanor')
 
 @section('styles')
 <style>

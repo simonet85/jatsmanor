@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', $residence->name . ' - Jatsmanor')
+@section('title', (app()->getLocale() === 'en' && !empty($residence->name_en) ? $residence->name_en : $residence->name) . ' - Jatsmanor')
 
 @section('content')
 <!-- Breadcrumb -->
 <div class="max-w-7xl mx-auto px-4 py-4 text-sm text-gray-500">
     <a href="{{ route('residences') }}" class="hover:underline">
-        <i class="fas fa-arrow-left mr-1"></i> Retour aux résidences
+        <i class="fas fa-arrow-left mr-1"></i> {{ trans('messages.residences.back') }}
     </a>
 </div>
 
@@ -41,7 +41,7 @@
                 <div class="mb-4 relative">
                     <img id="mainImage" 
                          src="{{ $primaryImage }}?v={{ time() }}" 
-                         alt="{{ $residence->name }}" 
+                         alt="{{ app()->getLocale() === 'en' && !empty($residence->name_en) ? $residence->name_en : $residence->name }}" 
                          class="w-full h-80 object-cover rounded-lg shadow-lg cursor-pointer transition-transform duration-300 hover:scale-105"
                          loading="lazy"
                          onclick="openImageModal(this.src)"
@@ -53,7 +53,7 @@
                     @if($totalImages > 1)
                         <div class="absolute top-4 right-4 bg-black bg-opacity-70 text-white px-3 py-1 rounded-full text-sm">
                             <i class="fas fa-images mr-1"></i>
-                            {{ $totalImages }} photos
+                            {{ $totalImages }} {{ trans('messages.residence_details.photos') }}
                         </div>
                     @endif
                 </div>
@@ -91,7 +91,13 @@
 
         <!-- Informations -->
         <div>
-            <h1 class="text-3xl font-bold mb-2">{{ $residence->name }}</h1>
+            <h1 class="text-3xl font-bold mb-2">
+                @if(app()->getLocale() === 'en' && !empty($residence->name_en))
+                    {{ $residence->name_en }}
+                @else
+                    {{ $residence->name }}
+                @endif
+            </h1>
             
             @if($residence->reviews->count() > 0)
                 <div class="flex items-center gap-2 mb-4">
@@ -119,15 +125,21 @@
 
             <div class="text-3xl font-bold text-blue-800 mb-6">
                 {{ number_format($residence->price_per_night, 0, ',', '.') }} FCFA
-                <span class="text-lg font-normal text-gray-600">/ nuit</span>
+                <span class="text-lg font-normal text-gray-600">{{ trans('messages.residence_details.per_night') }}</span>
             </div>
 
-            <p class="text-gray-700 mb-6">{{ $residence->description }}</p>
+            <p class="text-gray-700 mb-6">
+                @if(app()->getLocale() === 'en' && !empty($residence->description_en))
+                    {{ $residence->description_en }}
+                @else
+                    {{ $residence->description ?? $residence->short_description }}
+                @endif
+            </p>
 
             <!-- Équipements -->
             @if($residence->amenities->count() > 0)
                 <div class="mb-6">
-                    <h3 class="font-semibold mb-3">Équipements</h3>
+                    <h3 class="font-semibold mb-3">{{ trans('messages.residence_details.amenities') }}</h3>
                     <div class="grid grid-cols-2 gap-2">
                         @foreach($residence->amenities as $amenity)
                             <div class="flex items-center gap-2 text-sm">
@@ -141,41 +153,41 @@
 
             <!-- Formulaire de réservation rapide -->
             <div class="bg-gray-50 p-6 rounded-lg">
-                <h3 class="font-semibold mb-4">Réserver maintenant</h3>
+                <h3 class="font-semibold mb-4">{{ trans('messages.residence_details.book_now') }}</h3>
                 <form action="{{ route('booking.create', $residence) }}" method="GET" class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium mb-1">Arrivée</label>
+                            <label class="block text-sm font-medium mb-1">{{ trans('messages.residence_details.checkin') }}</label>
                             <input type="date" name="checkin" 
                                    value="{{ request('checkin') }}"
                                    min="{{ date('Y-m-d') }}"
                                    class="w-full p-2 border rounded" required />
                         </div>
                         <div>
-                            <label class="block text-sm font-medium mb-1">Départ</label>
+                            <label class="block text-sm font-medium mb-1">{{ trans('messages.residence_details.checkout') }}</label>
                             <input type="date" name="checkout" 
                                    value="{{ request('checkout') }}"
                                    class="w-full p-2 border rounded" required />
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium mb-1">Invités</label>
+                        <label class="block text-sm font-medium mb-1">{{ trans('messages.residence_details.guests') }}</label>
                         <select name="guests" class="w-full p-2 border rounded" required>
-                            <option value="1" {{ request('guests') == '1' ? 'selected' : '' }}>1 personne</option>
-                            <option value="2" {{ request('guests') == '2' || !request('guests') ? 'selected' : '' }}>2 personnes</option>
-                            <option value="3" {{ request('guests') == '3' ? 'selected' : '' }}>3 personnes</option>
-                            <option value="4" {{ request('guests') == '4' ? 'selected' : '' }}>4 personnes</option>
+                            <option value="1" {{ request('guests') == '1' ? 'selected' : '' }}>1 {{ trans('messages.residence_details.person') }}</option>
+                            <option value="2" {{ request('guests') == '2' || !request('guests') ? 'selected' : '' }}>2 {{ trans('messages.residence_details.persons') }}</option>
+                            <option value="3" {{ request('guests') == '3' ? 'selected' : '' }}>3 {{ trans('messages.residence_details.persons') }}</option>
+                            <option value="4" {{ request('guests') == '4' ? 'selected' : '' }}>4 {{ trans('messages.residence_details.persons') }}</option>
                         </select>
                     </div>
                     @auth
                         <button type="submit" class="w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold py-3 rounded-lg">
                             <i class="fas fa-calendar-check mr-2"></i>
-                            Réserver maintenant
+                            {{ trans('messages.residence_details.book_now_button') }}
                         </button>
                     @else
                         <a href="{{ route('login') }}" class="block w-full bg-blue-800 hover:bg-blue-900 text-white font-semibold py-3 rounded-lg text-center">
                             <i class="fas fa-sign-in-alt mr-2"></i>
-                            Connectez-vous pour réserver
+                            {{ trans('messages.residence_details.login_to_book') }}
                         </a>
                     @endauth
                 </form>
@@ -187,7 +199,7 @@
     <div class="grid md:grid-cols-3 gap-8">
         <!-- Description complète -->
         <div class="md:col-span-2">
-            <h2 class="text-2xl font-bold mb-4">À propos de cette résidence</h2>
+            <h2 class="text-2xl font-bold mb-4">{{ trans('messages.residence_details.about_residence') }}</h2>
             <div class="prose max-w-none text-gray-700">
                 {!! nl2br(e($residence->long_description ?? $residence->description)) !!}
             </div>
@@ -195,7 +207,7 @@
             <!-- Avis clients -->
             @if($residence->reviews->count() > 0)
                 <div class="mt-8">
-                    <h2 class="text-2xl font-bold mb-4">Avis des clients</h2>
+                    <h2 class="text-2xl font-bold mb-4">{{ trans('messages.residence_details.customer_reviews') }}</h2>
                     <div class="space-y-4">
                         @foreach($residence->reviews->take(3) as $review)
                             <div class="bg-white p-4 rounded-lg border">
@@ -226,27 +238,27 @@
         <div>
             <!-- Informations de contact -->
             <div class="bg-white p-6 rounded-lg shadow mb-6">
-                <h3 class="font-semibold mb-4">Informations pratiques</h3>
+                <h3 class="font-semibold mb-4">{{ trans('messages.residence_details.practical_info') }}</h3>
                 <div class="space-y-3 text-sm">
                     <div class="flex items-center gap-3">
                         <i class="fas fa-clock text-blue-600"></i>
                         <div>
-                            <div class="font-medium">Check-in</div>
-                            <div class="text-gray-600">À partir de 14h00</div>
+                            <div class="font-medium">{{ trans('messages.residence_details.checkin') }}</div>
+                            <div class="text-gray-600">{{ trans('messages.residence_details.checkin_time') }}</div>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
                         <i class="fas fa-clock text-blue-600"></i>
                         <div>
-                            <div class="font-medium">Check-out</div>
-                            <div class="text-gray-600">Avant 11h00</div>
+                            <div class="font-medium">{{ trans('messages.residence_details.checkout') }}</div>
+                            <div class="text-gray-600">{{ trans('messages.residence_details.checkout_time') }}</div>
                         </div>
                     </div>
                     <div class="flex items-center gap-3">
                         <i class="fas fa-ban text-red-600"></i>
                         <div>
-                            <div class="font-medium">Annulation</div>
-                            <div class="text-gray-600">Gratuite jusqu'à 48h avant</div>
+                            <div class="font-medium">{{ trans('messages.residence_details.cancellation') }}</div>
+                            <div class="text-gray-600">{{ trans('messages.residence_details.free_cancellation') }}</div>
                         </div>
                     </div>
                 </div>
@@ -254,7 +266,7 @@
 
             <!-- Contact -->
             <div class="bg-white p-6 rounded-lg shadow">
-                <h3 class="font-semibold mb-4">Besoin d'aide ?</h3>
+                <h3 class="font-semibold mb-4">{{ trans('messages.residence_details.need_help') }}</h3>
                 <div class="space-y-3 text-sm">
                     <a href="tel:+22507070707" class="flex items-center gap-3 hover:text-blue-600">
                         <i class="fas fa-phone text-blue-600"></i>
@@ -266,7 +278,7 @@
                     </a>
                     <div class="flex items-center gap-3">
                         <i class="fas fa-clock text-blue-600"></i>
-                        <span>Support 24h/24</span>
+                        <span>{{ trans('messages.residence_details.support_247') }}</span>
                     </div>
                 </div>
             </div>

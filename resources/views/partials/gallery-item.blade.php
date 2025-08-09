@@ -19,7 +19,7 @@
     </div>
     <div class="p-4">
         <h3 class="font-semibold mb-2">{{ $title }}</h3>
-        <p class="text-sm text-gray-600">{{ $description }}</p>
+    <p class="text-sm text-gray-600">{{ function_exists('getResidenceDescription') && isset($residence) ? getResidenceDescription($residence) : $description }}</p>
         @if(isset($features) && is_array($features))
             <div class="flex flex-wrap gap-1 mt-2">
                 @foreach($features as $feature)

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Réinitialiser le mot de passe - Jatsmanor')
+@section('title', trans('messages.auth.reset_password_title') . ' - Jatsmanor')
 
 @section('styles')
 <style>
