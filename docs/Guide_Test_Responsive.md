@@ -351,3 +351,4 @@ lighthouse https://votre-domaine.com --only-categories=performance
 ---
 
 **✨ Votre plateforme Jatsmanor est maintenant parfaitement responsive !**
+

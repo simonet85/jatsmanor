@@ -12,6 +12,49 @@
     
     <style>
         body { font-family: "Inter", sans-serif; }
+        
+        /* Ensure navigation stays at top */
+        nav.sticky {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 9999 !important;
+            width: 100% !important;
+        }
+        
+        /* Prevent any elements from pushing navigation down */
+        body > *:not(nav) {
+            position: relative;
+        }
+        
+        /* Ensure main content doesn't overlap navigation */
+        main {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Additional fixes for navigation positioning */
+        nav {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 9999 !important;
+            width: 100% !important;
+            background: white !important;
+        }
+        
+        /* Ensure header doesn't interfere with navigation */
+        header {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Mobile-specific fixes */
+        @media (max-width: 768px) {
+            nav {
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 9999 !important;
+            }
+        }
     </style>
     
     @yield('styles')

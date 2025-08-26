@@ -2,8 +2,28 @@
 
 @section('title', 'Réservation ' . $booking->booking_reference . ' - Jatsmanor')
 
+@section('styles')
+<style>
+    /* Ensure booking page content doesn't interfere with navigation */
+    .booking-content {
+        position: relative;
+        z-index: 1;
+        margin-top: 0;
+        padding-top: 0;
+    }
+    
+    /* Ensure navigation stays at top */
+    nav {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 9999 !important;
+        width: 100% !important;
+    }
+</style>
+@endsection
+
 @section('content')
-<div class="max-w-4xl mx-auto px-4 py-8">
+<div class="booking-content max-w-4xl mx-auto px-4 py-8">
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <div>
@@ -246,6 +266,7 @@
 
 <!-- Container pour les notifications toast -->
 <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+@endsection
 
 @push('scripts')
 <script>

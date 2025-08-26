@@ -1,4 +1,4 @@
-<nav class="bg-white shadow sticky top-0 z-50">
+<nav class="bg-white shadow sticky top-0 z-[9999] w-full">
     <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
         <h1 class="text-xl font-bold text-blue-800">
             <a href="{{ route('home') }}">{{ setting('site_name', 'Jatsmanor') }}</a>
